@@ -23,16 +23,25 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.sql.DataSource;
+import javax.validation.Valid;
+import java.net.URI;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @SpringBootApplication
@@ -44,13 +53,59 @@ public class Main {
   @Autowired
   private DataSource dataSource;
 
+  UserService userService;
+
+  @Autowired
+  public void setUserService(UserService userService) {
+    this.userService = userService;
+  }
+
   public static void main(String[] args) throws Exception {
     SpringApplication.run(Main.class, args);
+  }
+
+  @RequestMapping("/api/search")
+  public ResponseEntity<?> getSearchResultViaAjax(
+          @Valid @RequestBody SearchCriteria search, Errors errors) {
+
+    AjaxResponseBody result = new AjaxResponseBody();
+
+    //If error, just return a 400 bad request, along with the error message
+    if (errors.hasErrors()) {
+
+      result.setMsg(errors.getAllErrors()
+              .stream().map(x -> x.getDefaultMessage())
+              .collect(Collectors.joining(",")));
+
+      return ResponseEntity.badRequest().body(result);
+
+    }
+
+    List<User> users = userService.findByUserNameOrEmail(search.getUsername());
+    if (users.isEmpty()) {
+      result.setMsg("no user found!");
+    } else {
+      result.setMsg("success");
+    }
+    result.setResult(users);
+
+    return ResponseEntity.ok(result);
+
   }
 
   @RequestMapping("/test")
   String test(){
     return "propfind";
+  }
+
+  @RequestMapping("/ajax")
+  String ajax(){
+    return "ajax";
+  }
+
+  @RequestMapping("/test/save")
+  void sendPropfind(){
+    System.out.println("testing");
   }
 
   @RequestMapping("/")
