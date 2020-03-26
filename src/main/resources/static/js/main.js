@@ -21,7 +21,7 @@ function fire_ajax_submit() {
     $.ajax({
         type: "PROPFIND",
         contentType: "application/json",
-        url: "/api/search",
+        url: "search",
         data: JSON.stringify(search),
         dataType: 'json',
         cache: false,

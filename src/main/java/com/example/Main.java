@@ -64,7 +64,7 @@ public class Main {
     SpringApplication.run(Main.class, args);
   }
 
-  @RequestMapping("/api/search")
+  @RequestMapping("/search")
   public ResponseEntity<?> getSearchResultViaAjax(
           @Valid @RequestBody SearchCriteria search, Errors errors) {
 
