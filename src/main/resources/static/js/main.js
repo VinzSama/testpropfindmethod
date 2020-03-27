@@ -20,11 +20,7 @@ function fire_ajax_submit() {
 
     $.ajax({
         type: "PROPFIND",
-        contentType: "application/json",
         url: "search",
-        data: JSON.stringify(search),
-        dataType: 'json',
-        cache: false,
         timeout: 600000,
         success: function (data) {
 
@@ -37,7 +33,12 @@ function fire_ajax_submit() {
 
         },
         error: function (e) {
+        var json = "<h4>Ajax Response</h4>&lt;pre&gt;"
+                        + JSON.stringify(data, null, 4) + "&lt;/pre&gt;";
+                    $('#feedback').html(json);
 
+                    console.log("SUCCESS : ", data);
+                    $("#btn-search").prop("disabled", false);
             var json = "<h4>Ajax Response</h4>&lt;pre&gt;"
                 + e.responseText + "&lt;/pre&gt;";
             $('#feedback').html(json);

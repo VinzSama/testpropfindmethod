@@ -65,13 +65,12 @@ public class Main {
   }
 
   @RequestMapping("/search")
-  public ResponseEntity<?> getSearchResultViaAjax(
-          @Valid @RequestBody SearchCriteria search, Errors errors) {
+  public ResponseEntity<?> getSearchResultViaAjax() {
 
     AjaxResponseBody result = new AjaxResponseBody();
 
     //If error, just return a 400 bad request, along with the error message
-    if (errors.hasErrors()) {
+    /*if (errors.hasErrors()) {
 
       result.setMsg(errors.getAllErrors()
               .stream().map(x -> x.getDefaultMessage())
@@ -79,9 +78,9 @@ public class Main {
 
       return ResponseEntity.badRequest().body(result);
 
-    }
+    }*/
 
-    List<User> users = userService.findByUserNameOrEmail(search.getUsername());
+    List<User> users = userService.findByUserNameOrEmail("test");
     if (users.isEmpty()) {
       result.setMsg("no user found!");
     } else {
