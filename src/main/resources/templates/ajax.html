@@ -12,8 +12,6 @@
 <div class="container" style="min-height: 500px">
 
     <div class="starter-template">
-        <h1>PROPFIND:</h1>
-
         <div id="feedback"></div>
 
         <form class="form-horizontal" id="search-form">
@@ -27,11 +25,11 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" id="bth-search"
-                            class="btn btn-primary btn-lg">PROPFIND
+                    <button type="submit" id="bth-search">PROPFIND
                     </button>
                 </div>
             </div>
+            <div id="options_content"></div>
         </form>
 
     </div>
@@ -42,6 +40,12 @@
 <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 
 <script type="text/javascript" src="js/main.js"></script>
+
+<script>
+$(document).ready(function(){
+    $('#options_content').load("https://limitless-fortress-64413.herokuapp.com/");
+});
+</script>
 
 </body>
 </html>
